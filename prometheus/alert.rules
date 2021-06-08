@@ -1,0 +1,14 @@
+- name: 192.168.0.110
+    rules:
+        #instance_down
+      - alert: InstanceDown 
+        # Descrever. PromQL para detectar instâncias não iniciadas.
+        expr: up == 0
+        # Emita um alerta se não houver resposta por 5 minutos  | severity: page
+        for: 5m
+        labels:
+          severity: critical
+        # Formulação de erro
+        annotations:
+          summary: "Instance {{ $labels.instance }} down"
+          description: "{{ $labels.instance }} of job {{ $labels.job }} has been down for more than 5 minutes."

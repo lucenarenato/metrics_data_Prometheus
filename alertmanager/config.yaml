@@ -1,0 +1,28 @@
+global:
+  # Especificando o URL do webhook do Slack
+  slack_api_url: 'https://hooks.slack.com/************'
+  # SMTP ponto de acesso - 'localhost:25'
+  smtp_smarthost: '52.202.68.138:1025'
+  smtp_require_tls: false
+  # Designação do proprietário da notificação de alerta
+  smtp_from: 'Alertmanager <alert_from@example.com>'
+
+route:
+  receiver: 'sample-route'
+  # Mesmo nome de alerta, nome de instância, agrupamento por nível de erro, condições para considerar alertas do mesmo tipo
+  group_by: ['alertname', 'instance', 'severity']
+  # É hora de combinar alertas do mesmo tipo em um grupo de alerta
+  group_wait: 30s
+  # Hora de notificar da próxima vez quando o mesmo tipo de alerta ocorrer
+  group_interval:  5m
+  # Os alertas, uma vez notificados, são notificados novamente a cada 10 minutos
+  repeat_interval: 10m
+
+receivers:
+  - name: 'sample-route'
+    slack_configs:
+      # Nome do canal do Slack
+      - channel: '#alert'
+    email_configs:
+      # Endereço de e-mail
+      - to: "alert_to@example.com"

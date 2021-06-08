@@ -1,0 +1,38 @@
+global:
+  # coletar métricas
+  scrape_interval:     15s
+  # avaliar as regras de monitoramento
+  evaluation_interval: 15s
+  # Valor de tempo limite de coleta de métrica
+  scrape_timeout: 10s
+
+  external_labels:
+      # O nome do AlertManager usado para notificações de alerta
+      monitor: 'sample-monitor'
+
+# Caminho do arquivo de configuração da regra de monitoramento
+rule_files:
+  - /etc/prometheus/alert.rules
+
+# configurações de AlertManager
+alerting:
+  alertmanagers:
+    - scheme: http
+      static_configs:
+        - targets:
+          # Nome do host do Alert Manager: Número da porta
+          - alertmanager:9093
+
+# Configurações de coleta de métricas
+scrape_configs:
+  - job_name: prometheus
+    metrics_path: /metrics
+    static_configs:
+      - targets:
+        # host do servidor prometheus // your_prometeus.com:9090
+        - 192.168.0.110:9091
+  - file_sd_configs:
+    - files:
+      # Caminho do arquivo que descreve o destino da coleta de métricas
+      - /etc/prometheus/node.yaml
+    job_name: node
